@@ -25,7 +25,9 @@ from tasks import set_tasks_func
 async def on_startup(_engine: AsyncEngine) -> None:
     async with _engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-        await bot.send_message(config.tg_bot.developer_id, "Бот запущен!")
+        name_bot = await bot.get_my_name()
+        print(f"Name Bot: {name_bot.name}")
+        print(f"ID Bot: {bot.id}")
 
 
 async def on_shutdown(session: AsyncSession) -> None:
@@ -53,7 +55,7 @@ async def set_default_commands(bot: Bot):
             BotCommand(
                 command="my_reminders",
                 description="Мои напоминания",
-            ),  
+            ),
         ]
     )
 
@@ -83,5 +85,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+#     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
