@@ -34,4 +34,4 @@ async def del_remind(
         else:
             await session.delete(r)
     await session.commit()
-    await message.answer(text="напоминания удалены")
+    await message.answer(text="Напоминания удалены")
