@@ -43,7 +43,10 @@ async def get_tasks(
     state: FSMContext,
     user: User,
 ):
-    for time, msg, repeat in parse_tasks(message.text):
+    tasks = parse_tasks(message.text)
+    if not tasks:
+        return await message.answer(text="Напоминания не распознаны")
+    for time, msg, repeat in tasks:
         try:
             int(repeat)
         except Exception:
