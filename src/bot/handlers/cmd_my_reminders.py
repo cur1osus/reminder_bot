@@ -32,7 +32,7 @@ async def my_reminders(
     t = []
     for r in user.reminders:
         text_repeat = ", ".join([Weekdays.get(i) for i in r.repeat])
-        text = f"({r.idpk}) {r.time_to_send} [{text_repeat}] - {r.message}"
+        text = f"({r.idpk}) {r.time_to_send} \[{text_repeat}] - {r.message}"
         t.append(text)
     if not t:
         t.append("У вас нет напоминаний")
