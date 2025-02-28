@@ -48,7 +48,7 @@ async def set_default_commands(bot: Bot):
             ),
             BotCommand(
                 command="add_task",
-                description="Добавить напоминания   ё1",
+                description="Добавить напоминания",
             ),
             BotCommand(
                 command="my_reminders",
