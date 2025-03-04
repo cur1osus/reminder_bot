@@ -38,8 +38,6 @@ async def set_tasks_func(schedule: aioschedule):
                 schedule=schedule,
             ).tag(reminder.idpk)
             reminder.is_set = True
-            if Weekday.ONE_TIME.value in reminder.repeat:
-                await session.delete(reminder)
         await session.commit()
 
 
