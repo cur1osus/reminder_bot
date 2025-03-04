@@ -1,1 +1,1 @@
-from .task import set_tasks_func
+from .task import set_tasks_func, update_tasks

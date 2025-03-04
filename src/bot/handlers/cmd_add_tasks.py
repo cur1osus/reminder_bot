@@ -1,13 +1,12 @@
-import datetime
 from aiogram import Router
-from aiogram.filters import CommandObject, Command
+from aiogram.filters import Command, CommandObject
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
-from bot.states import UserState
-from tools import parse_tasks
 
-from db import User, Reminder
+from bot.states import UserState
+from db import Reminder, User
+from tools import parse_tasks
 
 router = Router()
 
@@ -24,7 +23,7 @@ async def add_tasks(
         text="""
 Отправьте напоминания списком
 Формат:
-<время> <повторение> <сообщение>
+[время] [повторение] [сообщение]
 
 Повторения указываются в виде комбинации или просто цифры, где 1 - понедельник, и так далее до 7 - воскресенье. Особые повторения, 0 - ежедневное и 8 - одноразовое.
 

@@ -1,7 +1,7 @@
 import asyncio
 import logging
-import sys
 
+import aioschedule
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.types import BotCommand
@@ -13,13 +13,11 @@ from bot.middlewares import (
     DBSessionMiddleware,
     ThrottlingMiddleware,
 )
-from config import config
 from db import Base
 from init_bot import bot
 from init_db import _engine, _sessionmaker
 from init_db_redis import redis
-import aioschedule
-from tasks import set_tasks_func
+from tasks import set_tasks_func, update_tasks
 
 
 async def on_startup(_engine: AsyncEngine) -> None:
@@ -36,6 +34,7 @@ async def on_shutdown(session: AsyncSession) -> None:
 
 async def scheduler() -> None:
     aioschedule.every(5).seconds.do(set_tasks_func, schedule=aioschedule)
+    aioschedule.every().day.at("00:00").do(update_tasks)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
@@ -63,6 +62,8 @@ async def set_default_commands(bot: Bot):
 async def main() -> None:
     dp = Dispatcher(_engine=_engine, storage=RedisStorage(redis=redis))
 
+    dp.workflow_data["schedule"] = aioschedule
+
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
@@ -85,5 +86,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    # logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    logging.basicConfig(level=logging.ERROR, filename="log.txt")
     asyncio.run(main())

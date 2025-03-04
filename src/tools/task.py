@@ -17,6 +17,6 @@ def parse_tasks(text: str):
             time = datetime.datetime.strptime(time, "%H:%M").time()
         except Exception:
             continue
-        time = f"{time.hour}:{time.minute}"
+        time = time.strftime("%H:%M")
         tasks.append((time, message, repeat))
     return tasks

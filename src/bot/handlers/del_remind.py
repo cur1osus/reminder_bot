@@ -1,13 +1,8 @@
-import datetime
 from aiogram import F, Router
-from aiogram.filters import CommandObject, Command
-from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
-from bot.states import UserState
-from tools import parse_tasks
 
-from db import User, Reminder
+from db import Reminder, User
 
 router = Router()
 
@@ -16,7 +11,7 @@ router = Router()
 async def del_remind(
     message: Message,
     session: AsyncSession,
-    state: FSMContext,
+    schedule,
     user: User,
 ):
     try:
@@ -32,6 +27,7 @@ async def del_remind(
         if not r:
             await message.answer(text=f"Напоминание с id {task_id} не найдена")
         else:
+            schedule.clear(tag=task_id)
             await session.delete(r)
     await session.commit()
     await message.answer(text="Напоминания удалены")

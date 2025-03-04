@@ -32,15 +32,16 @@ async def my_reminders(
     t = []
     for r in user.reminders:
         text_repeat = ", ".join([Weekdays.get(i) for i in r.repeat])
-        text = f"({r.idpk}) {r.time_to_send} \[{text_repeat}] - {r.message}"
+        text = f"({r.idpk}) {r.time_to_send} [{text_repeat}] - {r.message}"
         t.append(text)
     if not t:
         t.append("У вас нет напоминаний")
     t_str = "\n".join(t)
     len_message = 4050
     if len(t_str) > len_message:
-        for x in range(len(t_str)):
-            x2 = x + 1
-            await message.answer(text=t_str[x * len_message : x2 * len_message])
+        r = len(t_str) // len_message
+        for i in range(r + 1):
+            i2 = i + 1
+            await message.answer(text=t_str[i * len_message : i2 * len_message])
     else:
         await message.answer(text=t_str)
