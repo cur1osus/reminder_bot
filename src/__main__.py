@@ -86,5 +86,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.ERROR, filename="log.txt")
+    logging.basicConfig(level=logging.INFO, filename="log.txt")
     asyncio.run(main())

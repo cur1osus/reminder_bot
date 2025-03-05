@@ -9,9 +9,9 @@ from init_bot import bot
 from init_db import _sessionmaker
 
 
-async def send_message(reminder_idpk, id_user, message, schedule: aioschedule):
+async def send_message(id_user, message, schedule: aioschedule):
     await bot.send_message(chat_id=id_user, text=message)
-    schedule.clear(tag=reminder_idpk)
+    return schedule.CancelJob
 
 
 async def set_tasks_func(schedule: aioschedule):
@@ -32,11 +32,10 @@ async def set_tasks_func(schedule: aioschedule):
             hour, minute = reminder.time_to_send.split(":")
             schedule.every().day.at(f"{hour}:{minute}").do(
                 send_message,
-                reminder_idpk=reminder.idpk,
                 id_user=reminder.user.id_user,
                 message=reminder.message,
                 schedule=schedule,
-            ).tag(reminder.idpk)
+            ).tag(reminder.idpk, reminder.user.idpk)
             reminder.is_set = True
         await session.commit()
 
